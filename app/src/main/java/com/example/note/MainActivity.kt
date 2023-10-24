@@ -125,8 +125,8 @@ fun TipTimeLayout() {
                 .padding(bottom = 32.dp)
                 .fillMaxWidth(),
         )
-        MyButton(
-        )
+       val messageLogin : Boolean =  myButton(nameuser, namepass)
+
         if (isSnackbarLogin) {
             Snackbar(
                 modifier = Modifier.padding(16.dp),
@@ -141,7 +141,24 @@ fun TipTimeLayout() {
                 Text("Texto del botón: $buttonRegister")
             }
         }
+        if(messageLogin){
+            Snackbar(
+                modifier = Modifier.padding(16.dp),
+            ) {
+                Text("Success")
+            }
+        }else{
+            Snackbar(
+                modifier = Modifier.padding(16.dp),
+            ) {
+                Text("Error")
+            }
+        }
     }
+}
+private fun isValidCredentials(username: String, password: String): Boolean {
+// Implementa tu lógica de validación aquí, por ejemplo, verifica los datos en una base de datos
+    return username == "usuario" && password == "contraseña"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -164,21 +181,34 @@ fun EditNumberField(
 }
 
 @Composable
-fun MyButton(
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-    ) {
-        Spacer(modifier = Modifier.weight(1f))
-        Button(
-            onClick = { /* Acción al hacer clic en el botón */ }
+fun myButton( nameuser: String, namepass: String) : Boolean {
+    var isLoggedIn by remember { mutableStateOf(false) }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
         ) {
-            Text("Enter")
+            Spacer(modifier = Modifier.weight(1f))
+            Button(
+                onClick = {
+                    val message = isValidCredentials(nameuser, namepass)
+                    if (message) {
+                        isLoggedIn = true
+
+                    } else {
+                        isLoggedIn = false
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+
+            ) {
+                Text("Enter")
+            }
         }
+    return isLoggedIn
     }
-}
+
+
 
 @Preview(showBackground = true)
 @Composable
