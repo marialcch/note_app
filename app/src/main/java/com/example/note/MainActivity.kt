@@ -33,8 +33,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -71,22 +73,34 @@ class MainActivity : ComponentActivity() {
 fun TipTimeLayout() {
     var nameuser by remember { mutableStateOf("") }
     var namepass by remember { mutableStateOf("") }
-
+    val buttonLogin by remember { mutableStateOf("Log in") }
+    val buttonRegister by remember { mutableStateOf("Sign in") }
+    var isSnackbarLogin by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .statusBarsPadding()
-            .padding(horizontal = 40    .dp)
+            .padding(horizontal = 40.dp)
             .verticalScroll(rememberScrollState())
             .safeDrawingPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = "Login",
-            modifier = Modifier
-                .padding(bottom = 16.dp, top = 40.dp)
-                .align(alignment = Alignment.Start)
-        )
+    Row {
+        TextButton(
+            onClick = {
+                isSnackbarLogin = true
+            }
+        ) {
+            Text(text = buttonLogin)
+        }
+        TextButton(
+            onClick = {
+                isSnackbarLogin = false
+            }
+        ) {
+            Text(text = buttonRegister)
+        }
+    }
         EditNumberField(
             label = R.string.app_user,
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -95,7 +109,9 @@ fun TipTimeLayout() {
             ),
             value = nameuser,
             onValueChanged = { nameuser = it },
-            modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .fillMaxWidth(),
         )
         EditNumberField(
             label = R.string.app_pass,
@@ -105,10 +121,26 @@ fun TipTimeLayout() {
             ),
             value = namepass,
             onValueChanged = { namepass = it },
-            modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .fillMaxWidth(),
         )
         MyButton(
         )
+        if (isSnackbarLogin) {
+            Snackbar(
+                modifier = Modifier.padding(16.dp),
+            ) {
+                Text("Texto del botón: $buttonLogin")
+
+            }
+        }else{
+            Snackbar(
+                modifier = Modifier.padding(16.dp),
+            ) {
+                Text("Texto del botón: $buttonRegister")
+            }
+        }
     }
 }
 
